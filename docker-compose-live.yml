@@ -31,8 +31,8 @@ services:
       - elasticsearch
     networks:
       - elastinet
-    # volumes:
-      # - ./kibana/config/kibana.yml:/usr/share/kibana/config/kibana.yml:rw
+    volumes:
+      - ./kibana/config/kibana.yml:/usr/share/kibana/config/kibana.yml:rw
     restart: on-failure:5
 
   filebeat:
@@ -46,13 +46,14 @@ services:
       - elasticsearch
     volumes:
       - ./zeek/log:/pcap
+      - ./filebeat/config/filebeat.yml:/usr/share/filebeat/filebeat.yml
     command: -e
     networks:
       - elastinet
     restart: on-failure:5
-    environment:
-      - ELASTICSEARCH_USERNAME="elastic"
-      - ELASTICSEARCH_PASSWORD="123456"
+    # environment:
+    #   - ELASTICSEARCH_USERNAME="elastic"
+    #   - ELASTICSEARCH_PASSWORD="123456"
 
   zeek:
     container_name: zeek
