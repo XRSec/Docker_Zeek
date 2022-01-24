@@ -1,9 +1,9 @@
 FROM alpine:3.14 as builder
 LABEL maintainer="xrsec"
 LABEL mail="troy@zygd.site"
-LABEL Github="https://github.com/XRSec/AWVS14-Update"
-LABEL org.opencontainers.image.source="https://github.com/XRSec/AWVS14-Update"
-LABEL org.opencontainers.image.title="AWVS14-Update"
+LABEL Github="https://github.com/XRSec/Docker_Zeek"
+LABEL org.opencontainers.image.source="https://github.com/XRSec/Docker_Zeek"
+LABEL org.opencontainers.image.title="Docker_Zeek"
 
 # ENV ZEEK_VERSION 4.1.1
 
