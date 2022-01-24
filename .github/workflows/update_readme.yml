@@ -1,0 +1,47 @@
+name: Update Readme
+on:
+  schedule:
+    - cron:  '0 0 * * MON'
+  workflow_dispatch:
+
+jobs:
+  Update_Readme:
+    runs-on: ubuntu-latest
+    steps:
+      - 
+        name: Private Actions Checkout
+        uses: actions/checkout@v2.3.4
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+      - 
+        name: Create local changes
+        run: |
+          echo 'IyBKdXB5dGVyIFJ1c3QKCiFbdmVyc2lvbl0oaHR0cHM6Ly9pbWcuc2hpZWxkcy5pby9iYWRnZS9EYXRlLQ==' | base64 -d > README.md
+          echo $(date "+%Y_%m_%d")$(echo 'LWRhMjgyYSkgWyFbRG9ja2VyIEF1dG9tYXRlZCBCdWlsZF0oaHR0cHM6Ly9pbWcuc2hpZWxkcy5pby9kb2NrZXIvYXV0b21hdGVkL3hyc2VjL2p1cHl0ZXJfcnVzdD9sYWJlbD1CdWlsZCZsb2dvPWRvY2tlciZzdHlsZT1mbGF0LXNxdWFyZSldKGh0dHBzOi8vaHViLmRvY2tlci5jb20vci94cnNlYy9qdXB5dGVyX3J1c3QpIFshW0p1cHl0ZXIgRG9ja2VyIEJ1aWxkXShodHRwczovL2dpdGh1Yi5jb20vWFJTZWMvSnVweXRlcl9SdXN0L2FjdGlvbnMvd29ya2Zsb3dzL2p1cHl0ZXIueW1sL2JhZGdlLnN2ZyldKGh0dHBzOi8vZ2l0aHViLmNvbS9YUlNlYy9KdXB5dGVyX1J1c3QvYWN0aW9ucy93b3JrZmxvd3MvanVweXRlci55bWwpIFshW3ZlcnNpb25dKGh0dHBzOi8vaW1nLnNoaWVsZHMuaW8vYmFkZ2UvRnJvbS1nb29nbGUvZXZjeHItZGEyODJhKV0oaHR0cHM6Ly9naXRodWIuY29tL2dvb2dsZS9ldmN4cik=' | base64 -d) >> README.md
+          echo 'Ci0gdXNlIFtnb29nbGUvZXZjeHJdKGh0dHBzOi8vZ2l0aHViLmNvbS9nb29nbGUvZXZjeHIpCi0gdXNlIFtvaG15ei5zaC9dKGh0dHBzOi8vZ2lzdC5naXRodWIuY29tL1hSU2VjLzBlNDdjOWI3OTM4ODdkMjAxYmFiOWRlMmEwN2E3NDBjKQotIGVuYWJsZSBwbHVn77yaYGdpdCB6c2gtc3ludGF4LWhpZ2hsaWdodGluZyB6c2gtYXV0b3N1Z2dlc3Rpb25zIGRvY2tlciBrdWJlY3RsIGJyZXcgZ29sYW5nIGhpc3Rvcnkgbm1hcCBub2RlIG5wbSBwaXAgcGlwZW52IHB5ZW52IHB5bGludCBweXRob24gc2NyZWVuIHN1YmxpbWVgCgojIyBSdW4KCmBgYGJhc2gKIyBHRVQgRklMRQpkb2NrZXIgcnVuIC1pdCAtZCAtLW5hbWUganVweXRlciAtLXJtIHhyc2VjL2p1cHl0ZXJfcnVzdDpsYXRlc3QKZG9ja2VyIGNwIGp1cHl0ZXI6L3Jvb3Qvbm90ZWJvb2sgL2RvY2tlci9qdXB5dGVyCmRvY2tlciBzdG9wIGp1cHl0ZXIKCmRvY2tlciBydW4gLWl0IC1kIFwKLS1yZXN0YXJ0PWFsd2F5cyBcCi0tbmFtZSBqdXB5dGVyIFwKLXYgIi9kb2NrZXIvanVweXRlcjovcm9vdC9ub3RlYm9vayIgXAotcCA4ODg4Ojg4ODggXAp4cnNlYy9qdXB5dGVyX3J1c3QKCiMgR2V0IFRvY2tlbgpkb2NrZXIgbG9ncyBqdXB5dGVyCiMgQXRoZXIgU2V0dGluZwpjbGljayBqdXB5dGVyL3VweXRlcl9ub3RlYm9va19jb25maWcucHkKYGBgCgo8aHI+IAoK' | base64 -d >> README.md
+          curl -s $(curl -u ${{ secrets.DOCKERHUB_USERNAME }}:${{ secrets.TOKEN_GITHUB }} -s 'https://api.github.com/repos/google/evcxr/contents/evcxr_jupyter/README.md' | grep "download_url" | cut -d '"' -f 4) >> README.md
+      - 
+        name: Commit files
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add README.md
+          git commit -m "Add changes by Jupyter_Update_Action" -a
+      - 
+        name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.TOKEN_GITHUB }}
+          branch: ${{ github.ref }}
+
+  Repository_Dispatch:
+    needs: Update_Readme
+    runs-on: ubuntu-latest
+    steps:
+      - 
+        name: Repository Dispatch
+        uses: peter-evans/repository-dispatch@v1
+        with:
+          token: ${{ secrets.TOKEN_GITHUB }}
+          event-type: Jupyter_Update_Action
