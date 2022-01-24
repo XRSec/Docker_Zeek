@@ -171,6 +171,7 @@ jobs:
   Update_Docker_Hub_Description:
     name: Update Docker Hub Description
     runs-on: ubuntu-latest
+    needs: [Build_For_Elastic,Build_For_Filebeat,Build_For_Kibana,Build_For_Zeek]
     steps:
       - 
         name: Private Actions Checkout
