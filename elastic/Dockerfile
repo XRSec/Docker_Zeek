@@ -29,8 +29,8 @@ RUN set -ex \
     chown -R elasticsearch:elasticsearch "$path"; \
     done
 
-COPY elastic/config/elastic/elasticsearch.yml /etc/elasticsearch/elasticsearch.yml
-COPY elastic/config/elastic/log4j2.properties /etc/elasticsearch/og4j2.properties
+COPY elastic/config/elasticsearch.yml /etc/elasticsearch/elasticsearch.yml
+COPY elastic/config/log4j2.properties /etc/elasticsearch/og4j2.properties
 COPY elastic/config/logrotate /etc/logrotate.d/elasticsearch
 COPY elastic/docker-healthcheck /usr/local/bin/
 VOLUME ["/usr/share/elasticsearch/data"]

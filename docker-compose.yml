@@ -3,7 +3,7 @@ services:
   elasticsearch:
     container_name: elasticsearch
     hostname: elasticsearch
-    image: blacktop/elasticsearch:x-pack-7.7.1
+    image: xrsec/zeek:elastic
     environment:
       - discovery.type=single-node
       - elastic_pass="123456"
@@ -13,13 +13,13 @@ services:
       - elastinet
     restart: on-failure:5
     volumes:
-      - ./elasticsearch:/usr/share/elasticsearch/data
+      - ./elastic/data:/usr/share/elasticsearch/data
       # - ./config/elasticsearch.yml:/etc/elasticsearch/elasticsearch.yml:rw
 
   kibana:
     container_name: kibana
     hostname: kibana
-    image: blacktop/kibana:x-pack-7.7.1
+    image: xrsec/zeek:kibana
     environment:
       - xpack.reporting.enabled=false
     ports:
@@ -32,7 +32,6 @@ services:
       - elastinet
     # volumes:
       # - ./config/kibana.yml:/usr/share/kibana/config/kibana.yml:rw
-      # - ./config/kibana.sh:/docker-entrypoint.sh:ro
     restart: on-failure:5
 
   filebeat:
@@ -40,7 +39,7 @@ services:
     hostname: filebeat
     depends_on:
       - kibana
-    image: blacktop/filebeat:7.7.1
+    image: xrsec/zeek:filebeat
     links:
       - kibana
       - elasticsearch
@@ -56,10 +55,7 @@ services:
     hostname: zeek
     depends_on:
       - filebeat
-    build:
-      context: ./build/zeek/
-      cache_from:
-          - blacktop/zeek:elasticdocker 
+    image: xrsec/zeek
     volumes:
       - ./log:/pcap
     cap_add:
