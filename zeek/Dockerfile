@@ -102,8 +102,6 @@ RUN cd /tmp \
 ####################################################################################################
 FROM alpine:3.14
 
-LABEL maintainer "https://github.com/blacktop"
-
 RUN apk --no-cache add ca-certificates zlib openssl libstdc++ libpcap libgcc fts libmaxminddb
 
 COPY --from=builder /usr/local/zeek /usr/local/zeek
