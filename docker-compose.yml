@@ -1,0 +1,72 @@
+version: "3"
+services:
+  elasticsearch:
+    container_name: elasticsearch
+    hostname: elasticsearch
+    image: blacktop/elasticsearch:x-pack-7.7.1
+    environment:
+      - discovery.type=single-node
+      - elastic_pass="123456"
+    ports:
+      - "9200:9200"
+    networks:
+      - elastinet
+    restart: on-failure:5
+    volumes:
+      - ./elasticsearch:/usr/share/elasticsearch/data
+      # - ./config/elasticsearch.yml:/etc/elasticsearch/elasticsearch.yml:rw
+
+  kibana:
+    container_name: kibana
+    hostname: kibana
+    image: blacktop/kibana:x-pack-7.7.1
+    environment:
+      - xpack.reporting.enabled=false
+    ports:
+      - "5601:5601"
+    depends_on:
+      - elasticsearch
+    links:
+      - elasticsearch
+    networks:
+      - elastinet
+    # volumes:
+      # - ./config/kibana.yml:/usr/share/kibana/config/kibana.yml:rw
+      # - ./config/kibana.sh:/docker-entrypoint.sh:ro
+    restart: on-failure:5
+
+  filebeat:
+    container_name: filebeat
+    hostname: filebeat
+    depends_on:
+      - kibana
+    image: blacktop/filebeat:7.7.1
+    links:
+      - kibana
+      - elasticsearch
+    volumes:
+      - ./log:/pcap
+    command: -e
+    networks:
+      - elastinet
+    restart: on-failure:5
+
+  zeek:
+    container_name: zeek
+    hostname: zeek
+    depends_on:
+      - filebeat
+    build:
+      context: ./build/zeek/
+      cache_from:
+          - blacktop/zeek:elasticdocker 
+    volumes:
+      - ./log:/pcap
+    cap_add:
+      - NET_RAW
+    network_mode: "host"
+    command: -i eth1
+    restart: on-failure:5
+
+networks: 
+  elastinet:
