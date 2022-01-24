@@ -107,7 +107,7 @@ LABEL maintainer "https://github.com/blacktop"
 RUN apk --no-cache add ca-certificates zlib openssl libstdc++ libpcap libgcc fts libmaxminddb
 
 COPY --from=builder /usr/local/zeek /usr/local/zeek
-COPY local.zeek /usr/local/zeek/share/zeek/site/local.zeek
+COPY zeek/local.zeek /usr/local/zeek/share/zeek/site/local.zeek
 
 # Add a few zeek scripts
 ADD https://raw.githubusercontent.com/blacktop/docker-zeek/master/scripts/conn-add-geodata.zeek \

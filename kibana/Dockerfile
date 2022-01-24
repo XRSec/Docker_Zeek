@@ -4,7 +4,7 @@ LABEL mail="troy@zygd.site"
 LABEL Github="https://github.com/XRSec/Docker_Zeek"
 LABEL org.opencontainers.image.source="https://github.com/XRSec/Docker_Zeek"
 LABEL org.opencontainers.image.title="Docker_Zeek"
-COPY entrypoint.sh /usr/local/bin/entrypoint
+COPY kibana/entrypoint.sh /usr/local/bin/entrypoint
 
 RUN apt-get update \
   && apt-get install --no-install-recommends gnupg2 wget ca-certificates -y \
@@ -13,10 +13,10 @@ RUN apt-get update \
   && apt-get update \
   && apt-get install --no-install-recommends kibana \
   && chmod +x /usr/local/bin/entrypoint \
-  && useradd -s /sbin/nologin -d /nonexistent kibana \
+  && useradd -s /sbin/nologin -d /nonexistent kibana
 
 ENV PATH $PATH:/usr/share/kibana/bin
-COPY config/kibana/kibana.yml /usr/share/kibana/config/kibana.yml
+COPY kibana/config/kibana.yml /usr/share/kibana/config/kibana.yml
 WORKDIR /usr/share/kibana
 EXPOSE 5601
 ENTRYPOINT ["entrypoint"]
