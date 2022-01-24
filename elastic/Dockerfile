@@ -12,7 +12,9 @@ RUN apt-get update \
 	&& echo "deb https://artifacts.elastic.co/packages/7.x/apt stable main" | tee -a /etc/apt/sources.list.d/elastic-7.x.list \
 	&& apt-get update \
 	&& apt-get install --no-install-recommends elasticsearch \
-	&& chmod +x /usr/local/bin/entrypoint
+	&& chmod +x /usr/local/bin/entrypoint \
+    && apt clean -y && apt autoclean -y \
+    && rm -rf /var/lib/apt/lists/*
 
 ENV PATH $PATH:/usr/share/elasticsearch/bin
 WORKDIR /usr/share/elasticsearch
