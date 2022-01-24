@@ -45,11 +45,14 @@ services:
       - kibana
       - elasticsearch
     volumes:
-      - ./log:/pcap
+      - ./zeek/log:/pcap
     command: -e
     networks:
       - elastinet
     restart: on-failure:5
+    environment:
+      - ELASTICSEARCH_USERNAME="elastic"
+      - ELASTICSEARCH_PASSWORD="123456"
 
   zeek:
     container_name: zeek
@@ -62,7 +65,7 @@ services:
     cap_add:
       - NET_RAW
     network_mode: "host"
-    command: -i eth1
+    command: -i eth0
     restart: on-failure:5
 
 networks: 
