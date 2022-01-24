@@ -5,6 +5,7 @@ set -e
 umask 0002
 
 chown -R root:elasticsearch /etc/elasticsearch/
+chown -R elasticsearch:elasticsearch /usr/share/elasticsearch/data
 
 declare -a es_opts
 
