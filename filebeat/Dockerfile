@@ -13,7 +13,9 @@ RUN apt-get update \
 	&& apt-get update \
 	&& apt-get install --no-install-recommends filebeat \
 	&& chmod +x /usr/local/bin/entrypoint \
-	&& mkdir /usr/share/filebeat/logs /usr/share/filebeat/data
+	&& mkdir /usr/share/filebeat/logs /usr/share/filebeat/data \
+  	&& apt clean -y && apt autoclean -y \
+  	&& rm -rf /var/lib/apt/lists/*
 
 ENV PATH $PATH:/usr/share/filebeat
 COPY filebeat/config/filebeat.yml /usr/share/filebeat/filebeat.yml
