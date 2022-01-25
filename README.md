@@ -2,7 +2,7 @@
 
 ### Set The Password
 
-```
+```bash
 # Start elasticsearch
 
 mv $(pwd)/elastic/config $(pwd)/elastic/config.bak
@@ -52,7 +52,7 @@ docker-compose exec elasticsearch mv elastic-stack-ca.p12 data/cert/
 
 ### Set The Password
 
-```
+```bash
 # Start kibana
 
 mv $(pwd)/kibana/config $(pwd)/kibana/config.bak
