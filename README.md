@@ -77,7 +77,14 @@ chmod go-w $(pwd)/filebeat/config/filebeat.yml
 ## zeek
 
 ```bash
-docker cp zeek:/usr/local/zeek/share/zeek/site zeek
+# Start zeek
+docker run -it --rm \
+--name test \
+xrsec/zeek sleep 20 &
+
+# Copy Config
+
+docker cp test:/usr/local/zeek/share/zeek/site zeek/
 ```
 
 ## Debug
