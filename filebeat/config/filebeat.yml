@@ -19,30 +19,37 @@ filebeat.modules:
     enabled: true
     var.paths:
       - /pcap/dns*.log
+      - /pcap/*.dns.json
   http:
     enabled: true
     var.paths:
       - /pcap/http*.log
+      - /pcap/*.http.json
   files:
     enabled: true
     var.paths:
       - /pcap/files*.log
+      - /pcap/*.files.json
   ssl:
     enabled: true
     var.paths:
       - /pcap/ssl*.log
+      - /pcap/*.ssl.json
   notice:
     enabled: true
     var.paths:
       - /pcap/notice*.log
+      - /pcap/*.notice.json
 
 processors:
 - add_cloud_metadata: ~
 
 output.elasticsearch:
   hosts: '${ELASTICSEARCH_HOSTS:elasticsearch:9200}'
-  username: '${ELASTICSEARCH_USERNAME:}'
-  password: '${ELASTICSEARCH_PASSWORD:}'
+  # username: 'elastic'
+  # password: '123456'
+  username: '${ELASTICSEARCH_USERNAME}'
+  password: '${ELASTICSEARCH_PASSWORD}'
 
 setup.kibana:
   host: '${KIBANA_HOST:kibana:5601}'

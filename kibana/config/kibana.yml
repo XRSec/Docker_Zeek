@@ -21,7 +21,7 @@ server.host: "0.0.0.0"
 
 # Specifies the public URL at which Kibana is available for end users. If
 # `server.basePath` is configured this URL should end with the same basePath.
-#server.publicBaseUrl: ""
+server.publicBaseUrl: "http://192.168.11.147:5601"
 
 # The maximum payload size in bytes for incoming server requests.
 #server.maxPayload: 1048576
@@ -46,10 +46,11 @@ elasticsearch.hosts: ["http://elasticsearch:9200"]
 # the username and password that the Kibana server uses to perform maintenance on the Kibana
 # index at startup. Your Kibana users still need to authenticate with Elasticsearch, which
 # is proxied through the Kibana server.
-#elasticsearch.username: "kibana_system"
-#elasticsearch.password: "pass"
-elasticsearch.username: "elastic"
-elasticsearch.password: "123456"
+# elasticsearch.username: elastic
+# elasticsearch.password: changeme
+elasticsearch.username: '${ELASTICSEARCH_USERNAME}'
+elasticsearch.password: '${ELASTICSEARCH_PASSWORD}'
+
 
 # Kibana can also authenticate to Elasticsearch via "service account tokens".
 # If may use this token instead of a username/password.
@@ -122,3 +123,5 @@ elasticsearch.password: "123456"
 i18n.locale: "zh-CN"
 
 xpack.monitoring.ui.container.elasticsearch.enabled: true
+# xpack.security.enabled: true
+# xpack.security.authc.api_key.enabled: true

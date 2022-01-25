@@ -99,4 +99,8 @@ discovery.seed_hosts: ["127.0.0.1", "[::1]"]
 
 action.auto_create_index: .security,.monitoring*,.watches,.triggered_watches,.watcher-history*,.ml*
 
-xpack.security.enabled: true
+xpack.security.enabled: '${XPACK_SECURITY_ENABLED}'
+# xpack.security.transport.ssl.enabled: true
+# xpack.security.transport.ssl.verification_mode: none
+# xpack.security.transport.ssl.keystore.path: data/cert/elastic-certificates.p12
+# xpack.security.transport.ssl.truststore.path: data/cert/elastic-certificates.p12

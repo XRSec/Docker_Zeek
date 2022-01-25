@@ -4,7 +4,7 @@
 
 # Installation-wide salt value that is used in some digest hashes, e.g., for
 # the creation of file IDs. Please change this to a hard to guess value.
-redef digest_salt = "blacktop";
+redef digest_salt = "xrsec";
 
 # This script logs which scripts were loaded during each run.
 @load misc/loaded-scripts
@@ -100,6 +100,8 @@ redef digest_salt = "blacktop";
 # Uncomment the following line to enable logging of link-layer addresses. Enabling
 # this adds the link-layer address for each connection endpoint to the conn.log file.
 @load policy/protocols/conn/mac-logging
+
+@load policy/tuning/json-logs.zeek
 
 # Custom conn geoip enrichment
 @load geodata/conn-add-geodata.zeek

@@ -1,28 +1,34 @@
 version: "3"
 services:
   elasticsearch:
+    # https://www.elastic.co/guide/en/elasticsearch/reference/current/docker.html
     container_name: elasticsearch
     hostname: elasticsearch
-    image: blacktop/elasticsearch:x-pack-7.7.1
+    image: elastic/elasticsearch:7.16.3
     environment:
       - discovery.type=single-node
-      - elastic_pass="123456"
+      - XPACK_SECURITY_ENABLED=true
+      - ELASTIC_PASSWORD="123456"
+      # - KEYSTORE_PASSWORD="123456"
     ports:
       - "9200:9200"
     networks:
       - elastinet
     restart: on-failure:5
     volumes:
-      - ./elastic/entrypoint.sh:/usr/local/bin/entrypoint:ro
+      - ./elastic/docker-entrypoint.sh:/usr/local/bin/docker-entrypoint.sh:ro
       - ./elastic/data:/usr/share/elasticsearch/data
-      - ./elastic/config/elasticsearch.yml:/etc/elasticsearch/elasticsearch.yml:rw
+      - ./elastic/config:/usr/share/elasticsearch/config:rw
 
   kibana:
+    # 
     container_name: kibana
     hostname: kibana
-    image: blacktop/kibana:x-pack-7.7.1
+    image: elastic/kibana:7.16.3
     environment:
       - xpack.reporting.enabled=false
+      - ELASTICSEARCH_USERNAME="elastic"
+      - ELASTICSEARCH_PASSWORD="123456"
     ports:
       - "5601:5601"
     depends_on:
@@ -32,7 +38,7 @@ services:
     networks:
       - elastinet
     volumes:
-      - ./kibana/config/kibana.yml:/usr/share/kibana/config/kibana.yml:rw
+      - ./kibana/config:/usr/share/kibana/config/:rw
     restart: on-failure:5
 
   filebeat:
@@ -40,7 +46,7 @@ services:
     hostname: filebeat
     depends_on:
       - kibana
-    image: blacktop/filebeat:7.7.1
+    image: elastic/filebeat:7.16.3
     links:
       - kibana
       - elasticsearch
@@ -51,9 +57,9 @@ services:
     networks:
       - elastinet
     restart: on-failure:5
-    # environment:
-    #   - ELASTICSEARCH_USERNAME="elastic"
-    #   - ELASTICSEARCH_PASSWORD="123456"
+    environment:
+      - ELASTICSEARCH_USERNAME="elastic"
+      - ELASTICSEARCH_PASSWORD="123456"
 
   zeek:
     container_name: zeek
@@ -63,6 +69,7 @@ services:
     image: xrsec/zeek
     volumes:
       - ./zeek/log:/pcap
+      - ./zeek/local.zeek:/usr/local/zeek/share/zeek/site/local.zeek:rw
     cap_add:
       - NET_RAW
     network_mode: "host"
