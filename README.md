@@ -107,3 +107,7 @@ entrypoint kibana
 ```bash
 curl --silent "${kibana_HOSTS}/_cat/health" | awk '{print $4}'
 ```
+
+## Thanks
+
+- [blacktop](https://github.com/blacktop/docker-zeek)
